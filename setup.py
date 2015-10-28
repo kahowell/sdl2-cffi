@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+import os
 
 setup(
     name='sdl2-cffi',
@@ -19,6 +20,6 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy'
     ],
     setup_requires=['cffi>=1.0.0'],
-    cffi_modules=['bindings/sdl2.py:ffi'],
+    cffi_modules=['{}:ffi'.format(os.sep.join(['sdl2', '_cffi.py']))],
     install_requires=['cffi>=1.0.0']
 )
