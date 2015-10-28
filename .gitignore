@@ -1,4 +1,5 @@
 __pycache__
+dist/
 env/
 build/
 .eggs/
