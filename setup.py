@@ -10,6 +10,7 @@ setup(
     url='https://github.com/kahowell/sdl2-cffi',
     keywords=['sdl2', 'cffi'],
     classifiers=[
+        'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: zlib/libpng License',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
