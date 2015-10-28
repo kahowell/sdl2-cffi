@@ -19,7 +19,7 @@ setup(
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy'
     ],
-    setup_requires=['cffi>=1.0.0'],
+    setup_requires=['cffi>=1.0.0', 'pycparser>=2.14'],
     cffi_modules=['{}:ffi'.format(os.sep.join(['sdl2', '_cffi.py']))],
     install_requires=['cffi>=1.0.0']
 )
