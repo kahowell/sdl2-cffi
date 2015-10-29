@@ -73,7 +73,7 @@ except:  # assume windows FIXME
     cflags = ''
     cflags_libs = ''
     devel_root = os.getenv('SDL2_DEVEL_PATH')
-    include_dir = os.sep.join([devel_root, 'include'])
+    include_dir = os.path.abspath(os.sep.join([devel_root, 'include']))
     include_dirs = [include_dir]
     libraries = ['SDL2']
     if platform.architecture()[0] == '64bit':
@@ -100,9 +100,19 @@ DEFINE_ARGS = [
     '-D__extension__=',
     '-D__GNUC_VA_LIST=',
     '-D__gnuc_va_list=void*',
-    '-D__asm__(x)=',
     '-D__inline__=',
-    '-DDOXYGEN_SHOULD_IGNORE_THIS='
+    '-D__forceinline=',
+    '-D__volatile__=',
+    '-D__MINGW_NOTHROW=',
+    '-D__nothrow__=',
+    '-DCRTIMP=',
+    '-DSDL_FORCE_INLINE=',
+    '-DDOXYGEN_SHOULD_IGNORE_THIS=',
+    '-D_PROCESS_H_=',
+    '-U__GNUC__',
+    '-Ui386',
+    '-U__i386__'
+    '-U__MINGW32__'
 ]
 
 pycparser_args = {
@@ -125,7 +135,8 @@ class Collector(c_ast.NodeVisitor):
         self.functions = []
 
     def process_typedecl(self, node):
-        if node.coord is None or node.coord.file.find(include_dir) != -1:
+        coord = os.path.abspath(node.coord.file)
+        if node.coord is None or coord.find(include_dir) != -1:
             typedecl = '{};'.format(self.generator.visit(node))
             typedecl = ARRAY_SIZEOF_PATTERN.sub('[...]', typedecl)
             self.typedecls.append(typedecl)
@@ -137,7 +148,8 @@ class Collector(c_ast.NodeVisitor):
         return enum
 
     def visit_Typedef(self, node):
-        if node.coord is None or node.coord.file.find(include_dir) != -1:
+        coord = os.path.abspath(node.coord.file)
+        if node.coord is None or coord.find(include_dir) != -1:
             if ((isinstance(node.type, c_ast.TypeDecl) and
                  isinstance(node.type.type, c_ast.Enum))):
                 self.sanitize_enum(node.type.type)
@@ -150,12 +162,14 @@ class Collector(c_ast.NodeVisitor):
         self.process_typedecl(node)
 
     def visit_Enum(self, node):
-        if node.coord is None or node.coord.file.find(include_dir) != -1:
+        coord = os.path.abspath(node.coord.file)
+        if node.coord is None or coord.find(include_dir) != -1:
             node = self.sanitize_enum(node)
             self.process_typedecl(node)
 
     def visit_FuncDecl(self, node):
-        if node.coord is None or node.coord.file.find(include_dir) != -1:
+        coord = os.path.abspath(node.coord.file)
+        if node.coord is None or coord.find(include_dir) != -1:
             if isinstance(node.type, c_ast.PtrDecl):
                 function_name = node.type.type.declname
             else:
@@ -188,6 +202,7 @@ print('Processing {} defines, {} types, {} functions'.format(
     len(collector.typedecls),
     len(collector.functions)
 ))
+
 ffi.cdef('\n'.join(itertools.chain(*[
     defines,
     collector.typedecls,
