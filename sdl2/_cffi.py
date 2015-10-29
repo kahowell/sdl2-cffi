@@ -5,6 +5,7 @@ import os
 import pycparser
 import json
 import itertools
+import platform
 from pycparser import c_ast
 from pycparser.c_generator import CGenerator
 
