@@ -105,8 +105,15 @@ DEFINE_ARGS = [
     '-DDOXYGEN_SHOULD_IGNORE_THIS='
 ]
 
+pycparser_args = {
+    'use_cpp': True,
+    'cpp_args': DEFINE_ARGS
+}
+if os.name == 'nt':  #windows
+    mingw_path = os.getenv('MINGW_PATH', default='C:\\MinGW')
+    pycparser_args['cpp_path'] = '{}\\bin\\cpp.exe'.format(mingw_path)
 ast = pycparser.parse_file(os.sep.join([include_dir, 'SDL.h']),
-                           use_cpp=True, cpp_args=DEFINE_ARGS)
+                           **pycparser_args)
 
 
 class Collector(c_ast.NodeVisitor):
