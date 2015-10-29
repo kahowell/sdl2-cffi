@@ -60,14 +60,33 @@ HEADERS = [
 ]
 
 ffi = FFI()
-cflags = check_output(['sdl2-config', '--cflags']).decode('utf-8').strip()
-cflags_libs = check_output(['sdl2-config', '--libs']).decode('utf-8').strip()
-
-include_dir = INCLUDE_PATTERN.search(cflags).group(2)
+try:
+    cflags = check_output(['sdl2-config', '--cflags']).decode('utf-8').strip()
+    cflags_libs = check_output(['sdl2-config',
+                                '--libs']).decode('utf-8').strip()
+    include_dir = INCLUDE_PATTERN.search(cflags).group(2)
+    include_dirs = []
+    libraries = []
+    library_dirs = []
+except:  # assume windows FIXME
+    cflags = ''
+    cflags_libs = ''
+    devel_root = os.getenv('SDL2_DEVEL_PATH')
+    include_dir = os.sep.join([devel_root, 'include'])
+    include_dirs = [include_dir]
+    libraries = ['SDL2']
+    if platform.architecture()[0] == '64bit':
+        architecture = 'x64'
+    else:
+        architecture = 'x86'
+    library_dirs = [os.sep.join([devel_root, 'lib', architecture])]
 
 ffi.set_source(
     '_sdl2',
     '#include "SDL.h"',
+    include_dirs=include_dirs,
+    libraries=libraries,
+    library_dirs=library_dirs,
     extra_compile_args=cflags.split(),
     extra_link_args=cflags_libs.split()
 )
