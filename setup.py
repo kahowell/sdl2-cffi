@@ -1,9 +1,23 @@
 from setuptools import setup, find_packages
 import os
+import platform
+import shutil
+
+package_data = {}
+if os.name == 'nt':  # windows
+    devel_root = os.getenv('SDL2_DEVEL_PATH')
+    print(devel_root)
+    if platform.architecture()[0] == '64bit':
+        architecture = 'x64'
+    else:
+        architecture = 'x86'
+    shutil.copyfile(os.sep.join([devel_root, 'lib', architecture, 'SDL2.dll']), 'SDL2.dll')
+    package_data[''] = ['SDL2.dll']
 
 setup(
     name='sdl2-cffi',
     packages=['sdl2'],
+    package_data=package_data,
     version='0.1.4',
     description='CFFI wrapper for SDL2',
     author='Kevin Howell',
