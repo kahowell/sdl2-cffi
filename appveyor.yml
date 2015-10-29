@@ -7,6 +7,10 @@ environment:
     # See: http://stackoverflow.com/a/13751649/163740
     WITH_COMPILER: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_compiler.cmd"
     SDL2_VERSION: '2.0.3'
+    USER:
+      secure: nmGcMi0wFW8VLkwwxgUvUg==
+    PASSWORD:
+      secure: 8SYGM59fuZFyAh5bq7sthkVfRPHX6sw8X5s0MJ0r/zM=
 
   matrix:
 
