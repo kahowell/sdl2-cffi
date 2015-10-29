@@ -18,7 +18,7 @@ setup(
     name='sdl2-cffi',
     packages=['sdl2'],
     package_data=package_data,
-    version='0.1.4',
+    version='0.1.5',
     description='CFFI wrapper for SDL2',
     author='Kevin Howell',
     author_email='kevin@kahowell.net',
