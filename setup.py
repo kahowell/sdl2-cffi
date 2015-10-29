@@ -4,7 +4,7 @@ import os
 setup(
     name='sdl2-cffi',
     packages=['sdl2'],
-    version='0.1.2',
+    version='0.1.3',
     description='CFFI wrapper for SDL2',
     author='Kevin Howell',
     author_email='kevin@kahowell.net',
