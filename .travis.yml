@@ -7,9 +7,9 @@ python:
 sudo: required
 
 before_install:
-  - sudo add-apt-repository ppa:openmw/openmw
+  - "echo 'yes' | sudo add-apt-repository ppa:openmw/openmw"
   - sudo apt-get update -qq
-  - "echo 'yes' | sudo apt-get install -qq libsdl2-dev"
+  - sudo apt-get install -qq libsdl2-dev
 
 install:
   - pip install wheel
