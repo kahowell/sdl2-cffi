@@ -6,6 +6,7 @@ import pycparser
 import json
 import itertools
 import platform
+import sys
 from pycparser import c_ast
 from pycparser.c_generator import CGenerator
 
@@ -61,7 +62,7 @@ HEADERS = [
 ]
 
 ffi = FFI()
-try:
+if sys.platform.startswith('linux'):
     cflags = check_output(['sdl2-config', '--cflags']).decode('utf-8').strip()
     cflags_libs = check_output(['sdl2-config',
                                 '--libs']).decode('utf-8').strip()
@@ -69,7 +70,7 @@ try:
     include_dirs = []
     libraries = []
     library_dirs = []
-except:  # assume windows FIXME
+else:  # FIXME assumes windows otherwise
     cflags = ''
     cflags_libs = ''
     devel_root = os.getenv('SDL2_DEVEL_PATH')
@@ -119,7 +120,7 @@ pycparser_args = {
     'use_cpp': True,
     'cpp_args': DEFINE_ARGS
 }
-if os.name == 'nt':  #windows
+if sys.platform.startswith('win'):  #windows
     mingw_path = os.getenv('MINGW_PATH', default='C:\\MinGW')
     pycparser_args['cpp_path'] = '{}\\bin\\cpp.exe'.format(mingw_path)
 ast = pycparser.parse_file(os.sep.join([include_dir, 'SDL.h']),

@@ -1,14 +1,14 @@
 from setuptools import setup, find_packages
 import os
 import platform
+import sys
 import shutil
 
 VERSION='0.1.6'
 
 package_data = {}
-if os.name == 'nt':  # windows
+if sys.platform.startswith('win'):  # windows
     devel_root = os.getenv('SDL2_DEVEL_PATH')
-    print(devel_root)
     if platform.architecture()[0] == '64bit':
         architecture = 'x64'
     else:
