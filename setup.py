@@ -13,7 +13,10 @@ if sys.platform.startswith('win'):  # windows
         architecture = 'x64'
     else:
         architecture = 'x86'
-    shutil.copyfile(os.sep.join([devel_root, 'lib', architecture, 'SDL2.dll']), 'SDL2.dll')
+    dll_source = os.sep.join([devel_root, 'lib', architecture, 'SDL2.dll'])
+    dll_dest = os.sep.join(['sdl2', 'SDL2.dll'])
+    print('Copying {} to {}'.format(dll_source, dll_dest))
+    shutil.copyfile(dll_source, dll_dest)
     package_data['sdl2'] = ['SDL2.dll']
 
 setup(

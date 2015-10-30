@@ -84,7 +84,7 @@ else:  # FIXME assumes windows otherwise
     library_dirs = [os.sep.join([devel_root, 'lib', architecture])]
 
 ffi.set_source(
-    '_sdl2',
+    'sdl2._sdl2',
     '#include "SDL.h"',
     include_dirs=include_dirs,
     libraries=libraries,
