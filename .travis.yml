@@ -4,7 +4,9 @@ python:
   - '3.3'
   - '3.4'
 
-before_install: sudo apt-get install -qq libsdl2-dev
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq libsdl2-dev
 
 install:
   - pip install wheel
@@ -12,7 +14,7 @@ install:
   - python setup.py bdist_wheel
 
 script:
-  - twine upload -u USER -p PASSWORD dist/*
+  - twine upload -u $USER -p $PASSWORD dist/*
 
 env:
-  secure: OXMo/8rWfL5Pk2WN/FafzfDr52MqgGwsO4XOSp1EKAY0FtBAGO3msCDHFM99wv86wZNHX5OyW5JEO/W1oR1JYvMa4XIr73rjcr5qt4O11HL5y1hABNXSkrQVVPJgWKSOs6Yi+TrRWmyoOj7SsKRGzod9NMwKfifHgMXPbjnnabMwXiDg5DZM/0VoiR1wexXOz+pSwFzPCWTdQPU63qZGZybVMGRc6x98Ic4NNI/ckelt+fRpvOWLFEUljXIo8EWsHJ4yoIaDn28oBbrf2gw4WWD9acXBtWE1jh9wDrwENF+6ZkGQpfzCf7REsNTho7trVl8B5FmgHAxet2jwlC0fQgnbAa3WY3nkb845DbdKWpn+GDmEmbcaN2n+VJlLA8zRm2MA3n9CKJbbK475oUwovpb5ICpXbqaOOfLgBk1bWylYdyovmyABfLUQvIO9V7l/LkoKHu/lkCSEElGi/kc6uitUImXEJ9eib4GbvYL8ugheZeeukUcquoU46pEKBdl9/ycXMdOvyQdjTAiRFZQ7QGN+OIR2b7GLE7mFISAsV8Sd+ORPPDJZtfDI5mIAEyJneRiee5R0RXBa8VtYACHwDoUVHq0Jfzv3ZSOsYxZLHWfeKEjaj8hhlDhyxBBiyuVDnrYgZakKO4Bucu1AcV/VQ/sBnuS+o1+u+Tz1LflRKpw=
+  secure: "LpBKp925aHrUOqnysHp6hyqZlP2v6OwTE8cJH985KV8z03dOXDCkhDpA097vypIOvUwzzQ52+MZBG81nKf/uVoQMqGWUnso3RDtoQizU/YO/klJKpyZmtjIK0aN5ZMi+5ynI9nTenn5sM9NK1Z9wl4IFwHjskQSyNfIhAW9PD47lFYGZKJ/ICjRHBq+ZVWnM17amhKP/5bZdAfQFM/D2Is2Y7DvfYu1+XanotNIWiuBJ6Q2IH9RT+pyr/Rljwu8ueWMnSlkE5cdo5bUKeuFmjzChQsh1VJ1HuSy+Sy10tqMeRtSjsKu9hdZEW81uGLY6HKBFQxlT9MWWM1Nvvr3NCeTU2H437uQoOH4xysqLH32UwX/gjDVAHupImb4aCopz4F8GY3SVPVRYoXv2ydvfnCwnQK8xlH42Vzh3KTexJsgGoqsWIEHbNDPMQ6ByJLaxv28UtwCEJt/E5gVFQ3xRJUF9FBh/kUrEfoft9CbaVWCU7psFVB17ZhDn6HIf5AOpkEFoupHYPi+51efVvzYTHo4aaMKNXljZmrueoIVhVxv/kBUzqwsBqKBdRX3m9oDZueMwzbQVhEVdcrdkai01m5bwnh3yHiYhsvHq5oFqmX9iGDk9WJmnEiF920NmhxMpAoQW/kT5rMD8pc5Q1Y3dKWPbic4l5JNYnxfl09W/BLs="
