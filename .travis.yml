@@ -1,9 +1,10 @@
 language: python
 python:
-  - '2.6'
   - '2.7'
   - '3.3'
   - '3.4'
+
+before_install: sudo apt-get install -qq libsdl2-dev
 
 install:
   - pip install wheel
@@ -12,3 +13,6 @@ install:
 
 script:
   - twine upload -u USER -p PASSWORD dist/*
+
+env:
+  secure: OXMo/8rWfL5Pk2WN/FafzfDr52MqgGwsO4XOSp1EKAY0FtBAGO3msCDHFM99wv86wZNHX5OyW5JEO/W1oR1JYvMa4XIr73rjcr5qt4O11HL5y1hABNXSkrQVVPJgWKSOs6Yi+TrRWmyoOj7SsKRGzod9NMwKfifHgMXPbjnnabMwXiDg5DZM/0VoiR1wexXOz+pSwFzPCWTdQPU63qZGZybVMGRc6x98Ic4NNI/ckelt+fRpvOWLFEUljXIo8EWsHJ4yoIaDn28oBbrf2gw4WWD9acXBtWE1jh9wDrwENF+6ZkGQpfzCf7REsNTho7trVl8B5FmgHAxet2jwlC0fQgnbAa3WY3nkb845DbdKWpn+GDmEmbcaN2n+VJlLA8zRm2MA3n9CKJbbK475oUwovpb5ICpXbqaOOfLgBk1bWylYdyovmyABfLUQvIO9V7l/LkoKHu/lkCSEElGi/kc6uitUImXEJ9eib4GbvYL8ugheZeeukUcquoU46pEKBdl9/ycXMdOvyQdjTAiRFZQ7QGN+OIR2b7GLE7mFISAsV8Sd+ORPPDJZtfDI5mIAEyJneRiee5R0RXBa8VtYACHwDoUVHq0Jfzv3ZSOsYxZLHWfeKEjaj8hhlDhyxBBiyuVDnrYgZakKO4Bucu1AcV/VQ/sBnuS+o1+u+Tz1LflRKpw=
