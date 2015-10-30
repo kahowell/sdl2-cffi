@@ -3,6 +3,8 @@ import os
 import platform
 import shutil
 
+VERSION='0.1.6'
+
 package_data = {}
 if os.name == 'nt':  # windows
     devel_root = os.getenv('SDL2_DEVEL_PATH')
@@ -18,7 +20,7 @@ setup(
     name='sdl2-cffi',
     packages=['sdl2'],
     package_data=package_data,
-    version='0.1.5',
+    version=VERSION,
     description='CFFI wrapper for SDL2',
     author='Kevin Howell',
     author_email='kevin@kahowell.net',
