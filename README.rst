@@ -1,5 +1,7 @@
 sdl2-cffi
 =========
+|appveyor| |travis|
+
 sdl2-cffi is a python cffi wrapper for SDL2.
 
 Requirements
@@ -20,3 +22,9 @@ Why
 License
 -------
 sdl2-cffi is licensed under the zlib license (same as SDL2).
+
+.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/github/kahowell/sdl2-cffi?svg=true
+    :target: https://ci.appveyor.com/project/kahowell/sdl2-cffi
+
+.. |travis| image:: https://travis-ci.org/kahowell/sdl2-cffi.svg
+    :target: https://travis-ci.org/kahowell/sdl2-cffi
