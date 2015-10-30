@@ -4,7 +4,7 @@ import platform
 import sys
 import shutil
 
-VERSION='0.1.7'
+VERSION='0.2.0'
 
 package_data = {}
 if sys.platform.startswith('win'):  # windows
