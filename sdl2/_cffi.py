@@ -111,7 +111,7 @@ DEFINE_ARGS = [
     '-D_PROCESS_H_=',
     '-U__GNUC__',
     '-Ui386',
-    '-U__i386__'
+    '-U__i386__',
     '-U__MINGW32__'
 ]
 
