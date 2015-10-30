@@ -14,7 +14,7 @@ if sys.platform.startswith('win'):  # windows
     else:
         architecture = 'x86'
     shutil.copyfile(os.sep.join([devel_root, 'lib', architecture, 'SDL2.dll']), 'SDL2.dll')
-    package_data[''] = ['SDL2.dll']
+    package_data['sdl2'] = ['SDL2.dll']
 
 setup(
     name='sdl2-cffi',
