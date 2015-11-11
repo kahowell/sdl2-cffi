@@ -5,3 +5,4 @@ build/
 .eggs/
 *.so
 *.egg-info
+*.pyc
