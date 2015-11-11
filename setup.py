@@ -40,7 +40,7 @@ setup(
     ],
     setup_requires=['cffi>=1.0.0', 'pycparser>=2.14'],
     cffi_modules=[
-        '{}:build_ffi'.format(os.sep.join(['sdl2', '_cffi.py'])),
+        '{}:ffi'.format(os.sep.join(['sdl2', '_cffi.py'])),
         '{}:build_ffi'.format(os.sep.join(['sdl2', 'gl_api.py']))
     ],
     install_requires=['cffi>=1.0.0']
