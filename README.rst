@@ -29,9 +29,11 @@ Why
   licensed under zlib instead of GPLv2.
 - I wanted to experiment with CFFI. :-)
 
-License
--------
-sdl2-cffi is licensed under the zlib license (same as SDL2).
+Licenses
+--------
+- sdl2-cffi is licensed under the zlib license (same as SDL2).
+- sdl2-cffi contains a copy of the OpenGL spec (which is licensed under the
+  SGI Free Software License B) [see ``sdl2/gl.xml`` for more info].
 
 .. |appveyor| image:: https://ci.appveyor.com/api/projects/status/github/kahowell/sdl2-cffi?svg=true
     :target: https://ci.appveyor.com/project/kahowell/sdl2-cffi

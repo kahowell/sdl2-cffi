@@ -6,7 +6,7 @@ import shutil
 
 VERSION='0.2.0'
 
-package_data = {}
+package_data = {'': ['*.xml']}
 if sys.platform.startswith('win'):  # windows
     devel_root = os.getenv('SDL2_DEVEL_PATH')
     if platform.architecture()[0] == '64bit':
@@ -39,6 +39,9 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy'
     ],
     setup_requires=['cffi>=1.0.0', 'pycparser>=2.14'],
-    cffi_modules=['{}:ffi'.format(os.sep.join(['sdl2', '_cffi.py']))],
+    cffi_modules=[
+        '{}:build_ffi'.format(os.sep.join(['sdl2', '_cffi.py'])),
+        '{}:build_ffi'.format(os.sep.join(['sdl2', 'gl_api.py']))
+    ],
     install_requires=['cffi>=1.0.0']
 )
