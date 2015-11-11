@@ -6,7 +6,7 @@ import re
 
 TYPEDEF_PATTERN = re.compile(r'typedef.* \*?([\w]+);')
 
-with resource_stream('sdl2.gl', 'gl.xml') as gl_xml:
+with resource_stream('sdl2', 'gl.xml') as gl_xml:
     api = ElementTree.parse(gl_xml)
     types = api.find('types')
     typedefs = OrderedDict()
