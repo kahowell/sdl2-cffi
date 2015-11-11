@@ -3,6 +3,7 @@ from cffi import FFI
 from collections import OrderedDict
 import xml.etree.ElementTree as ElementTree
 import re
+import sys
 
 TYPEDEF_PATTERN = re.compile(r'typedef.* \*?([\w]+);')
 
@@ -12,6 +13,13 @@ with resource_stream('sdl2', 'gl.xml') as gl_xml:
     typedefs = OrderedDict()
     raw_typedefs = []
     for type in types.iterfind('type'):
+        # ignore gles for windows
+        type_name = type.get('name')
+        type_requires = type.get('requires')
+        if sys.platform.startswith('win'):
+            if type_name == 'khrplatform' or type_requires == 'khrplatform':
+                continue
+
         type_api = type.get('api')
         if not type_api:
             type_text = ''.join(type.itertext())
