@@ -1,7 +1,7 @@
 from .gl_api import apis
 from sdl2._gl import ffi
 from sdl2._gl import lib
-from sdl2 import SDL_GL_GetProcAddress
+from sdl2.sdl2 import SDL_GL_GetProcAddress
 
 
 class GL:
