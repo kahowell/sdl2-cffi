@@ -67,4 +67,4 @@ artifacts:
   - path: dist\*
 
 on_success:
-  - "%PYTHON%/Scripts/twine upload -u %USER% -p %PASSWORD% dist/* || echo ERROR uploading to pypi"
+  - "%PYTHON%/Scripts/twine upload -u %USER% -p %PASSWORD% dist/* && exit 0"
