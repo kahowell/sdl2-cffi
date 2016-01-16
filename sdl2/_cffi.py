@@ -19,6 +19,8 @@ DEFINE_BLACKLIST = {
     'main',
     'SDL_main',
     'SDL_AUDIOCVT_PACKED',
+    'IMG_GetError',
+    'IMG_SetError',
     'Mix_GetError',
     'Mix_SetError',
     'TTF_GetError',
@@ -88,28 +90,25 @@ HEADERS = [
     'SDL_version.h',
     'SDL_video.h',
     'SDL.h',
-    'SDL2_gfxPrimitives.h',
+    'SDL_image.h',
     'SDL_mixer.h',
     'SDL_ttf.h',
 ]
 
 ROOT_HEADERS = [
     'SDL.h', 
-    'SDL2_gfxPrimitives.h',
     'SDL_image.h',
     'SDL_mixer.h',
     'SDL_ttf.h',
 ]
 
 EXTRA_LIBS = [
-    'SDL2_gfx',
     'SDL2_image',
     'SDL2_mixer',
     'SDL2_ttf',
 ]
 
 class Collector(c_ast.NodeVisitor):
-    TYPEDEF_BLACKLIST = re.compile(r'fd_set')
 
     def __init__(self):
         self.generator = CGenerator()
