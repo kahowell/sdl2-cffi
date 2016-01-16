@@ -6,7 +6,10 @@ environment:
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
     WITH_COMPILER: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_compiler.cmd"
-    SDL2_VERSION: '2.0.3'
+    SDL2_VERSION: '2.0.4'
+    SDL2_IMAGE_VERSION: '2.0.1'
+    SDL2_MIXER_VERSION: '2.0.1'
+    SDL2_TTF_VERSION: '2.0.13'
     USER:
       secure: nmGcMi0wFW8VLkwwxgUvUg==
     PASSWORD:
@@ -53,6 +56,15 @@ install:
   - ps: "Start-FileDownload https://www.libsdl.org/release/SDL2-devel-$($env:SDL2_VERSION)-VC.zip"
   - cmd: "7z x SDL2-devel-%SDL2_VERSION%-VC.zip"
   - cmd: "set SDL2_DEVEL_PATH=%APPVEYOR_BUILD_FOLDER%\\SDL2-%SDL2_VERSION%"
+  - ps: "Start-FileDownload https://www.libsdl.org/release/SDL2_image-devel-$($env:SDL2_IMAGE_VERSION)-VC.zip"
+  - cmd: "7z x SDL2_image-devel-%SDL2_IMAGE_VERSION%-VC.zip"
+  - cmd: "set SDL2_DEVEL_PATH=%SDL2_DEVEL_PATH%;%APPVEYOR_BUILD_FOLDER%\\SDL2_image-%SDL2_IMAGE_VERSION%"
+  - ps: "Start-FileDownload https://www.libsdl.org/release/SDL2_mixer-devel-$($env:SDL2_MIXER_VERSION)-VC.zip"
+  - cmd: "7z x SDL2-devel-%SDL2_MIXER_VERSION%-VC.zip"
+  - cmd: "set SDL2_DEVEL_PATH=%SDL2_DEVEL_PATH%;%APPVEYOR_BUILD_FOLDER%\\SDL2_mixer-%SDL2_MIXER_VERSION%"
+  - ps: "Start-FileDownload https://www.libsdl.org/release/SDL2_ttf-devel-$($env:SDL2_TTF_VERSION)-VC.zip"
+  - cmd: "7z x SDL2-devel-%SDL2_TTF_VERSION%-VC.zip"
+  - cmd: "set SDL2_DEVEL_PATH=%SDL2_DEVEL_PATH%;%APPVEYOR_BUILD_FOLDER%\\SDL2_ttf-%SDL2_TTF_VERSION%"
   - cmd: "set PATH=C:\\MinGW\\bin;%PATH%"
 
 build: off

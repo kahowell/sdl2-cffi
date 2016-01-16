@@ -176,9 +176,8 @@ if sys.platform.startswith('linux'):
 else:  # FIXME assumes windows otherwise
     cflags = ''
     cflags_libs = ''
-    devel_root = os.getenv('SDL2_DEVEL_PATH')
-    include_dir = os.path.abspath(os.sep.join([devel_root, 'include']))
-    include_dirs = [include_dir]
+    devel_roots = os.getenv('SDL2_DEVEL_PATH').split(';')
+    include_dirs = [os.path.abspath(os.sep.join([devel_root, 'include'])) for devel_root in devel_roots]
     libraries = ['SDL2'] + EXTRA_LIBS
     if platform.architecture()[0] == '64bit':
         architecture = 'x64'
