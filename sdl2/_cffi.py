@@ -12,17 +12,48 @@ from pycparser.c_generator import CGenerator
 
 INCLUDE_PATTERN = re.compile(r'(-I)?(.*SDL2)')
 DEFINE_PATTERN = re.compile(r'^#define\s+(\w+)\s+\(?([\w<|.]+)\)?', re.M)
-DEFINE_BLACKLIST = [
+DEFINE_BLACKLIST = {
     'SDL_ANDROID_EXTERNAL_STORAGE_READ',
     'SDL_ANDROID_EXTERNAL_STORAGE_WRITE',
     'M_PI',
     'main',
     'SDL_main',
-    'SDL_AUDIOCVT_PACKED'
+    'SDL_AUDIOCVT_PACKED',
+    'IMG_GetError',
+    'IMG_SetError',
+    'Mix_GetError',
+    'Mix_SetError',
+    'TTF_GetError',
+    'TTF_SetError',
+}
+
+# define GCC specific compiler extensions away
+DEFINE_ARGS = [
+    '-D__attribute__(x)=',
+    '-D__inline=',
+    '-D__restrict=',
+    '-D__extension__=',
+    '-D__GNUC_VA_LIST=',
+    '-D__gnuc_va_list=void*',
+    '-D__inline__=',
+    '-D__forceinline=',
+    '-D__volatile__=',
+    '-D__MINGW_NOTHROW=',
+    '-D__nothrow__=',
+    '-DCRTIMP=',
+    '-DSDL_FORCE_INLINE=',
+    '-DDOXYGEN_SHOULD_IGNORE_THIS=',
+    '-D_PROCESS_H_=',
+    '-U__GNUC__',
+    '-Ui386',
+    '-U__i386__',
+    '-U__MINGW32__'
 ]
-FUNCTION_BLACKLIST = [
+
+FUNCTION_BLACKLIST = {
     'SDL_main'
-]
+}
+
 VARIADIC_ARG_PATTERN = re.compile(r'va_list \w+')
 ARRAY_SIZEOF_PATTERN = re.compile(r'\[[^\]]*sizeof[^\]]*]')
 
@@ -58,77 +89,26 @@ HEADERS = [
     'SDL_timer.h',
     'SDL_version.h',
     'SDL_video.h',
-    'SDL.h'
+    'SDL.h',
+    'SDL_image.h',
+    'SDL_mixer.h',
+    'SDL_ttf.h',
 ]
 
-ffi = FFI()
-if sys.platform.startswith('linux'):
-    cflags = check_output(['sdl2-config', '--cflags']).decode('utf-8').strip()
-    cflags_libs = check_output(['sdl2-config',
-                                '--libs']).decode('utf-8').strip()
-    include_dir = INCLUDE_PATTERN.search(cflags).group(2)
-    include_dirs = []
-    libraries = []
-    library_dirs = []
-else:  # FIXME assumes windows otherwise
-    cflags = ''
-    cflags_libs = ''
-    devel_root = os.getenv('SDL2_DEVEL_PATH')
-    include_dir = os.path.abspath(os.sep.join([devel_root, 'include']))
-    include_dirs = [include_dir]
-    libraries = ['SDL2']
-    if platform.architecture()[0] == '64bit':
-        architecture = 'x64'
-    else:
-        architecture = 'x86'
-    library_dirs = [os.sep.join([devel_root, 'lib', architecture])]
-
-ffi.set_source(
-    'sdl2._sdl2',
-    '#include "SDL.h"',
-    include_dirs=include_dirs,
-    libraries=libraries,
-    library_dirs=library_dirs,
-    extra_compile_args=cflags.split(),
-    extra_link_args=cflags_libs.split()
-)
-
-# define GCC specific compiler extensions away
-DEFINE_ARGS = [
-    '-D__attribute__(x)=',
-    '-D__inline=',
-    '-D__restrict=',
-    '-D__extension__=',
-    '-D__GNUC_VA_LIST=',
-    '-D__gnuc_va_list=void*',
-    '-D__inline__=',
-    '-D__forceinline=',
-    '-D__volatile__=',
-    '-D__MINGW_NOTHROW=',
-    '-D__nothrow__=',
-    '-DCRTIMP=',
-    '-DSDL_FORCE_INLINE=',
-    '-DDOXYGEN_SHOULD_IGNORE_THIS=',
-    '-D_PROCESS_H_=',
-    '-U__GNUC__',
-    '-Ui386',
-    '-U__i386__',
-    '-U__MINGW32__'
+ROOT_HEADERS = [
+    'SDL.h', 
+    'SDL_image.h',
+    'SDL_mixer.h',
+    'SDL_ttf.h',
 ]
 
-pycparser_args = {
-    'use_cpp': True,
-    'cpp_args': DEFINE_ARGS
-}
-if sys.platform.startswith('win'):  #windows
-    mingw_path = os.getenv('MINGW_PATH', default='C:\\MinGW')
-    pycparser_args['cpp_path'] = '{}\\bin\\cpp.exe'.format(mingw_path)
-ast = pycparser.parse_file(os.sep.join([include_dir, 'SDL.h']),
-                           **pycparser_args)
-
+EXTRA_LIBS = [
+    'SDL2_image',
+    'SDL2_mixer',
+    'SDL2_ttf',
+]
 
 class Collector(c_ast.NodeVisitor):
-    TYPEDEF_BLACKLIST = re.compile(r'fd_set')
 
     def __init__(self):
         self.generator = CGenerator()
@@ -140,7 +120,8 @@ class Collector(c_ast.NodeVisitor):
         if node.coord is None or coord.find(include_dir) != -1:
             typedecl = '{};'.format(self.generator.visit(node))
             typedecl = ARRAY_SIZEOF_PATTERN.sub('[...]', typedecl)
-            self.typedecls.append(typedecl)
+            if typedecl not in self.typedecls:
+                self.typedecls.append(typedecl)
 
     def sanitize_enum(self, enum):
         for name, enumeratorlist in enum.children():
@@ -179,10 +160,53 @@ class Collector(c_ast.NodeVisitor):
                 return
             decl = '{};'.format(self.generator.visit(node))
             decl = VARIADIC_ARG_PATTERN.sub('...', decl)
-            self.functions.append(decl)
+            if decl not in self.functions:
+                self.functions.append(decl)
+
+
+ffi = FFI()
+if sys.platform.startswith('linux'):
+    cflags = check_output(['sdl2-config', '--cflags']).decode('utf-8').strip()
+    cflags_libs = check_output(['sdl2-config', '--libs']
+                            ).decode('utf-8').strip() + ' -l' + ' -l'.join(EXTRA_LIBS)
+    include_dir = INCLUDE_PATTERN.search(cflags).group(2)
+    include_dirs = []
+    libraries = []
+    library_dirs = []
+else:  # FIXME assumes windows otherwise
+    cflags = ''
+    cflags_libs = ''
+    devel_roots = os.getenv('SDL2_DEVEL_PATH').split(';')
+    include_dirs = [os.path.abspath(os.sep.join([devel_root, 'include'])) for devel_root in devel_roots]
+    libraries = ['SDL2'] + EXTRA_LIBS
+    if platform.architecture()[0] == '64bit':
+        architecture = 'x64'
+    else:
+        architecture = 'x86'
+    library_dirs = [os.sep.join([devel_root, 'lib', architecture])]
+
+ffi.set_source(
+    'sdl2._sdl2',
+    ('\n').join('#include "%s"' % header for header in ROOT_HEADERS),
+    include_dirs=include_dirs,
+    libraries=libraries,
+    library_dirs=library_dirs,
+    extra_compile_args=cflags.split(),
+    extra_link_args=cflags_libs.split()
+)
+
+pycparser_args = {
+    'use_cpp': True,
+    'cpp_args': DEFINE_ARGS
+}
+if sys.platform.startswith('win'):  #windows
+    mingw_path = os.getenv('MINGW_PATH', default='C:\\MinGW')
+    pycparser_args['cpp_path'] = '{}\\bin\\cpp.exe'.format(mingw_path)
 
 collector = Collector()
-collector.visit(ast)
+for header in ROOT_HEADERS:
+    ast = pycparser.parse_file(os.sep.join([include_dir, header]), **pycparser_args)
+    collector.visit(ast)
 
 defines = set()
 for header_path in HEADERS:
