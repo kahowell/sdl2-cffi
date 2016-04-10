@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+import glob
 import os
 import platform
 import sys
@@ -8,16 +9,18 @@ VERSION = '1.0.4'
 
 package_data = {'': ['*.xml']}
 if sys.platform.startswith('win'):  # windows
-    devel_root = os.getenv('SDL2_DEVEL_PATH')
+    devel_roots = os.getenv('SDL2_DEVEL_PATH').split(';')
     if platform.architecture()[0] == '64bit':
         architecture = 'x64'
     else:
         architecture = 'x86'
-    dll_source = os.sep.join([devel_root, 'lib', architecture, 'SDL2.dll'])
-    dll_dest = os.sep.join(['sdl2', 'SDL2.dll'])
-    print('Copying {} to {}'.format(dll_source, dll_dest))
-    shutil.copyfile(dll_source, dll_dest)
-    package_data['sdl2'] = ['SDL2.dll']
+    for devel_root in devel_roots:
+        dll_sources = glob.glob(os.sep.join([devel_root, 'lib', architecture, '*.dll']))
+        dll_dest = 'sdl2'
+        for dll_source in dll_sources:
+            print('Copying {} to {}'.format(dll_source, dll_dest))
+            shutil.copy(dll_source, dll_dest)
+    package_data['sdl2'] = ['*.dll']
 
 setup(
     name='sdl2-cffi',
