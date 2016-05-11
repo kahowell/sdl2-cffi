@@ -25,6 +25,35 @@ DEFINE_BLACKLIST = {
     'Mix_SetError',
     'TTF_GetError',
     'TTF_SetError',
+    'SDL_malloc',
+    'SDL_calloc',
+    'SDL_realloc',
+    'SDL_free',
+    'SDL_memset',
+    'SDL_memcpy',
+    'SDL_memmove',
+    'SDL_memcmp',
+    'SDL_strlen',
+    'SDL_strlcpy',
+    'SDL_strlcat',
+    'SDL_strdup',
+    'SDL_strchr',
+    'SDL_strrchr',
+    'SDL_strstr',
+    'SDL_strcmp',
+    'SDL_strncmp',
+    'SDL_strcasecmp',
+    'SDL_strncasecmp',
+    'SDL_sscanf',
+    'SDL_vsscanf',
+    'SDL_snprintf',
+    'SDL_vsnprintf',
+    'SDL_PRINTF_FORMAT_STRING',
+    'SDL_PRIX64',
+    'SDL_PRIs64',
+    'SDL_PRIu64',
+    'SDL_PRIx64',
+    'SDL_SCANF_FORMAT_STRING'
 }
 
 # define GCC specific compiler extensions away
@@ -176,8 +205,9 @@ if sys.platform.startswith('linux'):
 else:  # FIXME assumes windows otherwise
     cflags = ''
     cflags_libs = ''
-    devel_roots = os.getenv('SDL2_DEVEL_PATH').split(';')
-    include_dirs = [os.path.abspath(os.sep.join([devel_root, 'include'])) for devel_root in devel_roots]
+    devel_root = os.getenv('SDL2_DEVEL_PATH')
+    include_dir = os.path.abspath(os.sep.join([devel_root, 'include']))
+    include_dirs = [include_dir]
     libraries = ['SDL2'] + EXTRA_LIBS
     if platform.architecture()[0] == '64bit':
         architecture = 'x64'
@@ -213,7 +243,7 @@ for header_path in HEADERS:
     with open(os.sep.join([include_dir, header_path]), 'r') as header_file:
         header = header_file.read()
         for match in DEFINE_PATTERN.finditer(header):
-            if match.group(1) in DEFINE_BLACKLIST:
+            if match.group(1) in DEFINE_BLACKLIST or match.group(1) in collector.typedecls or match.group(1) in collector.functions:
                 continue
             try:
                 int(match.group(2), 0)
