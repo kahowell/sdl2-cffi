@@ -4,10 +4,6 @@ python:
   - '3.3'
   - '3.4'
 
-branches:
-  only:
-    - master
-
 sudo: required
 dist: trusty
 
