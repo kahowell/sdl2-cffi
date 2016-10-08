@@ -68,8 +68,12 @@ install:
 
 build: off
 
+before_test:
+  - "%WITH_COMPILER% %PYTHON%/python setup.py develop"
+  - "%PYTHON%/python -m pip install nose2"
+
 test_script:
-  - "%WITH_COMPILER% %PYTHON%/python setup.py test"
+  - "%PYTHON%/python -m nose2"
 
 after_test:
   - "%WITH_COMPILER% %PYTHON%/python setup.py bdist_wheel"

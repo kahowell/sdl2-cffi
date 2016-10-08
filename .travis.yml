@@ -18,10 +18,15 @@ addons:
 install:
   - pip install wheel
   - pip install twine
-  - python setup.py install
+  - python setup.py develop
 
+before_script:
+  - 'export DISPLAY=:99.0'
+  - 'sh -e /etc/init.d/xvfb start'
+  - 'sleep 3' # give xvfb some time to start
+  - pip install nose2
 script:
-  - python setup.py test
+  - nose2
 
 env:
   secure: "LpBKp925aHrUOqnysHp6hyqZlP2v6OwTE8cJH985KV8z03dOXDCkhDpA097vypIOvUwzzQ52+MZBG81nKf/uVoQMqGWUnso3RDtoQizU/YO/klJKpyZmtjIK0aN5ZMi+5ynI9nTenn5sM9NK1Z9wl4IFwHjskQSyNfIhAW9PD47lFYGZKJ/ICjRHBq+ZVWnM17amhKP/5bZdAfQFM/D2Is2Y7DvfYu1+XanotNIWiuBJ6Q2IH9RT+pyr/Rljwu8ueWMnSlkE5cdo5bUKeuFmjzChQsh1VJ1HuSy+Sy10tqMeRtSjsKu9hdZEW81uGLY6HKBFQxlT9MWWM1Nvvr3NCeTU2H437uQoOH4xysqLH32UwX/gjDVAHupImb4aCopz4F8GY3SVPVRYoXv2ydvfnCwnQK8xlH42Vzh3KTexJsgGoqsWIEHbNDPMQ6ByJLaxv28UtwCEJt/E5gVFQ3xRJUF9FBh/kUrEfoft9CbaVWCU7psFVB17ZhDn6HIf5AOpkEFoupHYPi+51efVvzYTHo4aaMKNXljZmrueoIVhVxv/kBUzqwsBqKBdRX3m9oDZueMwzbQVhEVdcrdkai01m5bwnh3yHiYhsvHq5oFqmX9iGDk9WJmnEiF920NmhxMpAoQW/kT5rMD8pc5Q1Y3dKWPbic4l5JNYnxfl09W/BLs="

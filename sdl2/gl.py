@@ -1,4 +1,6 @@
-from .gl_api import apis
+from __future__ import absolute_import
+
+from sdl2.gl_api import apis
 from sdl2._gl import ffi
 from sdl2._gl import lib
 from sdl2.sdl2 import SDL_GL_GetProcAddress
