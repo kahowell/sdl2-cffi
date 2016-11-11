@@ -5,7 +5,7 @@ import platform
 import sys
 import shutil
 
-VERSION = '1.0.5'
+VERSION = '1.0.6'
 
 package_data = {'': ['*.xml']}
 if sys.platform.startswith('win'):  # windows
